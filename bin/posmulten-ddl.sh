@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 if [[ $0 != $BASH_SOURCE ]]; then
-    SCRIPT_DIR="$BASH_SOURCE"
+    SCRIPT_DIR="$(dirname $BASH_SOURCE)"
 else
-    SCRIPT_DIR="$0"
+    SCRIPT_DIR="$(dirname $0)"
 fi
 
 CREATE_SCRIPT_PATH="$2"
