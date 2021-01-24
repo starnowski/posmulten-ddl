@@ -12,14 +12,14 @@ function print_usage
 {
 cat << EOF
 USAGE:
-
+    A wrapper script for project https://github.com/starnowski/posmulten/tree/master/configuration-parent that allows to creates the shared schema strategy for multi-tenant approach.
 EOF
 }
 
 
 
 # Call getopt to validate the provided input.
-options=$(getopt -o "h" --long help,createSriptPath,dropScripPath: -- "$@")
+options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath: -- "$@")
 [ $? -eq 0 ] || {
     echo "Incorrect options provided"
     exit 1
@@ -35,7 +35,7 @@ while true; do
         print_usage
         exit 0
         ;;
-    --createSriptPath)
+    --createScriptPath)
         shift;
         CREATE_SCRIPT_PATH="$1"
         ;;
