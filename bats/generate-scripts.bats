@@ -42,9 +42,7 @@ function setup {
   [ ! -f "$BATS_TMPDIR/$TIMESTAMP/custom_dir/dscript.sql" ]
 
   #when
-  pushd "$BATS_TMPDIR/$TIMESTAMP"
   run "$RUN_SCRIPT" --createScriptPath "$BATS_TMPDIR/$TIMESTAMP/custom_dir/cscript.sql" --dropScripPath "$BATS_TMPDIR/$TIMESTAMP/custom_dir/dscript.sql" "$CONFIGURATION_FILE_PATH"
-  popd
 
   #then
   echo "output is --> $output <--"  >&3
@@ -55,6 +53,34 @@ function setup {
   #Smoke tests for scripts content
   grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/custom_dir/cscript.sql"
   grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/custom_dir/dscript.sql"
+}
+
+@test "should print usage for the h option" {
+  #given
+
+
+  #when
+  run "$RUN_SCRIPT" -h
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+
+  [ "${lines[0]}" = 'USAGE:' ]
+}
+
+@test "should print usage for the help option" {
+  #given
+
+
+  #when
+  run "$RUN_SCRIPT" --help
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+
+  [ "${lines[0]}" = 'USAGE:' ]
 }
 
 function teardown {
