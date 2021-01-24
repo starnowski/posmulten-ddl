@@ -13,6 +13,19 @@ function print_usage
 cat << EOF
 USAGE:
     A wrapper script for project https://github.com/starnowski/posmulten/tree/master/configuration-parent that allows to creates the shared schema strategy for multi-tenant approach.
+    For the passed path to the configuration file, the wrapper creates two SQL scripts. One contains DDL statements that create a shared schema strategy, and the other one drops it.
+
+    $BASH_SOURCE {Options} {Path to configuration file}
+
+ARGUMENTS:
+    1 - Path to configuration file
+
+OPTIONS:
+    -h, --help                  Prints the usage information
+        --createScriptPath      Sets path for a script that contains DDL statements that create a shared schema strategy. By default, a file with the name create_script.sql is being created in the current directory.
+        --dropScripPath         Sets path for a script that contains DDL statements that drop a shared schema strategy. By default, a file with the name drop_script.sql is being created in the current directory.
+
+
 EOF
 }
 
@@ -22,6 +35,7 @@ EOF
 options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath: -- "$@")
 [ $? -eq 0 ] || {
     echo "Incorrect options provided"
+    print_usage
     exit 1
 }
 
