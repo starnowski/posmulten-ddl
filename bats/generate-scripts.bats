@@ -17,7 +17,9 @@ function setup {
   [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
 
   #when
-  run "$RUN_SCRIPT" "$CONFIGURATION_FILE_PATH" "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" "$CONFIGURATION_FILE_PATH"
+  popd
 
   #then
   echo "output is --> $output <--"  >&3
