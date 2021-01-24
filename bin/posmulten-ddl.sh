@@ -73,6 +73,12 @@ while true; do
     shift
 done
 
+if [[ $# -eq 0 ]]; then
+    echo "Invalid number of arguments"
+    print_usage
+    exit 1
+fi
+
 JAR_FILE_PATH="$SCRIPT_DIR/../lib/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar"
 
 java -Dposmulten.configuration.config.file.path="$1" -Dposmulten.configuration.create.script.path="$CREATE_SCRIPT_PATH" -Dposmulten.configuration.drop.script.path="$DROP_SCRIPT_PATH" -jar "$JAR_FILE_PATH"
