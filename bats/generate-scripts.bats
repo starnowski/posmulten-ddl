@@ -32,6 +32,31 @@ function setup {
   grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
 }
 
+@test "Run executable jar file with passed java properties for valid configuration file and custom script file paths" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  mkdir -p "$BATS_TMPDIR/$TIMESTAMP/custom_dir"
+  # Results files
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/custom_dir/cscript.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/custom_dir/dscript.sql" ]
+
+  #when
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" --createScriptPath "$BATS_TMPDIR/$TIMESTAMP/custom_dir/cscript.sql" --dropScripPath "$BATS_TMPDIR/$TIMESTAMP/custom_dir/dscript.sql" "$CONFIGURATION_FILE_PATH"
+  popd
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/custom_dir/cscript.sql" ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/custom_dir/dscript.sql" ]
+
+  #Smoke tests for scripts content
+  grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/custom_dir/cscript.sql"
+  grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/custom_dir/dscript.sql"
+}
+
 function teardown {
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
 }
