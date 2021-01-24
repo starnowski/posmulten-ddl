@@ -2,8 +2,15 @@
 
 A wrapper script for project https://github.com/starnowski/posmulten/tree/master/configuration-parent that allows to creates the shared schema strategy for multi-tenant approach.
 For the passed path to the configuration file, the wrapper creates two SQL scripts. One contains DDL statements that create a shared schema strategy, and the other one drops it.
+__Important__, wrapper required JAVA in version 8 or newer.
 
-USAGE:
+### How install script
+
+*   Download or clone repository
+*   Add __bin__ directory to PATH
+
+## How to use wrapper
+
 ```bash
     ./posmulten-ddl.sh {Options} {Path to configuration file}
 ```
