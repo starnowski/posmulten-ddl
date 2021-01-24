@@ -31,7 +31,11 @@ DROP_SCRIPT_PATH="${CURRENT_DIR}/drop_script.sql"
 eval set -- "$options"
 while true; do
     case "$1" in
-    --h,help)
+    -h)
+        print_usage
+        exit 0
+        ;;
+    --help)
         print_usage
         exit 0
         ;;
