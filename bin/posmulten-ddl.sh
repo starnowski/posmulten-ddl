@@ -25,6 +25,10 @@ OPTIONS:
         --createScriptPath      Sets path for a script that contains DDL statements that create a shared schema strategy. By default, a file with the name create_script.sql is being created in the current directory.
         --dropScripPath         Sets path for a script that contains DDL statements that drop a shared schema strategy. By default, a file with the name drop_script.sql is being created in the current directory.
 
+EXAMPLES:
+
+    posmulten-ddl.sh ../examples/all-fields.yaml
+    posmulten-ddl.sh --createScriptPath "../examples/cscript.sql" --dropScripPath "../examples/dscript.sql" ../examples/all-fields.yaml
 
 EOF
 }
