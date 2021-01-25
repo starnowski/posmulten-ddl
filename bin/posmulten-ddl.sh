@@ -36,7 +36,7 @@ EOF
 
 
 # Call getopt to validate the provided input.
-options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath: -- "$@")
+options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath:,verbose -- "$@")
 [ $? -eq 0 ] || {
     echo "Incorrect options provided"
     print_usage
@@ -46,12 +46,16 @@ options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath: -- "$@")
 CURRENT_DIR=`pwd`
 CREATE_SCRIPT_PATH="${CURRENT_DIR}/create_script.sql"
 DROP_SCRIPT_PATH="${CURRENT_DIR}/drop_script.sql"
+VERBOSE="false"
 eval set -- "$options"
 while true; do
     case "$1" in
     -h)
         print_usage
         exit 0
+        ;;
+    --verbose)
+        VERBOSE="true"
         ;;
     --help)
         print_usage
@@ -81,4 +85,9 @@ fi
 
 JAR_FILE_PATH="$SCRIPT_DIR/../lib/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar"
 
-java -Dposmulten.configuration.config.file.path="$1" -Dposmulten.configuration.create.script.path="$CREATE_SCRIPT_PATH" -Dposmulten.configuration.drop.script.path="$DROP_SCRIPT_PATH" -jar "$JAR_FILE_PATH"
+if [[ ${VERBOSE} == "true" ]]; then
+    unzip -p "$JAR_FILE_PATH" debug-logging.properties > "$SCRIPT_DIR/../bin/debug-logging.properties"
+    java -Djava.util.logging.config.file="$SCRIPT_DIR/../bin/debug-logging.properties" -Dposmulten.configuration.config.file.path="$1" -Dposmulten.configuration.create.script.path="$CREATE_SCRIPT_PATH" -Dposmulten.configuration.drop.script.path="$DROP_SCRIPT_PATH" -jar "$JAR_FILE_PATH"
+else
+    java -Dposmulten.configuration.config.file.path="$1" -Dposmulten.configuration.create.script.path="$CREATE_SCRIPT_PATH" -Dposmulten.configuration.drop.script.path="$DROP_SCRIPT_PATH" -jar "$JAR_FILE_PATH"
+fi
