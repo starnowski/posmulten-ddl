@@ -83,6 +83,32 @@ function setup {
   [ "${lines[0]}" = 'USAGE:' ]
 }
 
+@test "Run executable jar file with verbose parameter for valid configuration file" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  # Results files
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+
+  #when
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" --verbose "$CONFIGURATION_FILE_PATH"
+  popd
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+
+  #Smoke tests for scripts content
+  grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
+  grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
+  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output_file"
+  grep 'INFO:' "$BATS_TMPDIR/$TIMESTAMP/output_file"
+}
+
 function teardown {
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
 }
