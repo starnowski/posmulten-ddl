@@ -4,3 +4,5 @@
 misc.xml
 modules.xml
 *.iml
+
+*-logging.properties
