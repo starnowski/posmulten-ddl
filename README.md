@@ -12,7 +12,7 @@ __Important__, wrapper required installed java in version 8 or newer.
 ## How to use wrapper
 
 ```bash
-    ./posmulten-ddl.sh {Options} {Path to configuration file}
+    posmulten-ddl.sh {Options} {Path to configuration file}
 ```
 
 ARGUMENTS:
