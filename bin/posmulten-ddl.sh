@@ -96,8 +96,15 @@ if [[ "$JAR_VERSION" == "" ]]; then
     CURRENT_JAR_VERSION="$POSMULTEN_JAR_FILE_VERSION"
 else
     if [[ ! -e "$SCRIPT_DIR/../work/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" ]]; then
+        set +e
         #Download
         curl "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${JAR_VERSION}/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" --output "$SCRIPT_DIR/../work/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar"
+        DOWNLOAD_STATUS="$?"
+        if [[ ! "$DOWNLOAD_STATUS" == "0" ]]; then
+            echo "Unable to download jar file for version ${JAR_VERSION}"
+            exit 1
+        fi
+        set -e
     fi
     CURRENT_JAR_VERSION="$JAR_VERSION"
 fi
