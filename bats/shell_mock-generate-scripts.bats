@@ -20,23 +20,17 @@ function setup {
   CREATE_SCRIPT_PATH="create/here/script.sql"
   DROP_SCRIPT_PATH="/drop/script.sql"
   source "$VARS_FILE_PATH"
-  shellmock_expect java --status 0 --type regex --match "-Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar .*configuration-jar-0.4.0-jar-with-dependencies.jar"
-  shellmock_expect java --status 0 --type regex --match "-Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} .*"
-
-
-  ### java -Dposmulten.configuration.config.file.path="$1" -Dposmulten.configuration.create.script.path="$CREATE_SCRIPT_PATH" -Dposmulten.configuration.drop.script.path="$DROP_SCRIPT_PATH" -jar "$JAR_FILE_PATH"
+  shellmock_expect java --status 0 --type regex --match "-Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar .*configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar"
 
   #when
   pushd "$BATS_TMPDIR/$TIMESTAMP"
-  run "$RUN_SCRIPT" "$CONFIGURATION_FILE_PATH"
+  run "$RUN_SCRIPT" --createScriptPath "$CREATE_SCRIPT_PATH" --dropScripPath "$DROP_SCRIPT_PATH" "$CONFIGURATION_FILE_PATH"
   popd
 
   shellmock_dump
   shellmock_verify
   echo "shellmock.out output :"  >&3
   cat shellmock.out  >&3
-  echo "shellmock.err output :"  >&3
-  #cat shellmock.err  >&3
 
   #then
   echo "output is --> $output <--"  >&3
