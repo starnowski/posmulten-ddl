@@ -1,3 +1,5 @@
+![Running the bats tests](https://github.com/starnowski/posmulten-ddl/workflows/Running%20the%20bats%20tests/badge.svg)
+
 # posmulten-ddl
 
 A wrapper script for project https://github.com/starnowski/posmulten/tree/master/configuration-parent that allows to creates the shared schema strategy for multi-tenant approach.
