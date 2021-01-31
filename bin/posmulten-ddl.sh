@@ -83,7 +83,10 @@ if [[ $# -eq 0 ]]; then
     exit 1
 fi
 
-JAR_FILE_PATH="$SCRIPT_DIR/../lib/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar"
+mkdir -p "$SCRIPT_DIR/../work"
+cp "$SCRIPT_DIR/../lib/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar" "$SCRIPT_DIR/../work"
+
+JAR_FILE_PATH="$SCRIPT_DIR/../work/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar"
 
 if [[ ${VERBOSE} == "true" ]]; then
     unzip -p "$JAR_FILE_PATH" debug-logging.properties > "$SCRIPT_DIR/../bin/debug-logging.properties"
