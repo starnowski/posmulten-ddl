@@ -95,7 +95,7 @@ function setup {
   echo "output is --> $output <--"  >&3
   echo "capture output ${capture[0]}"  >&3
   [ "$status" -eq 0 ]
-  [[ "${capture[1]}" =~ "java-stub -Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar" ]]
+  [[ "${capture[0]}" =~ "java-stub -Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar" ]]
 }
 
 function teardown {
