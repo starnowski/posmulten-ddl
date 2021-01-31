@@ -14,6 +14,9 @@ jobs:
       with:
         java-version: 1.8
     - name: Install bats
-      run: npm install bats@1.2.1
+      #https://github.com/hexojs/hexo/issues/2785
+      run:  sudo chown -R `whoami` /usr/local/lib/node_modules
+    - name: Install bats
+      run: npm install -g bats@1.2.1
     - name: Run bats tests
       run: bats -t bats
