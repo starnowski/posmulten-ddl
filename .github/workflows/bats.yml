@@ -15,9 +15,8 @@ jobs:
         java-version: 1.8
     - name: Install bats
       run:  |
-        npm install bats@1.2.1
-        bats -t bats
-#    - name: Get npm path
-#      run: npm config get prefix
+        git clone https://github.com/bats-core/bats-core.git
+        cd bats-core
+        ./install.sh /usr/local
     - name: Run bats tests
       run: bats -t bats
