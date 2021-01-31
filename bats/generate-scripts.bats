@@ -113,7 +113,7 @@ function setup {
 
 @test "Run executable jar file for specific version of jar file" {
   #given
-  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields-0.3.0-valid.yaml"
   TEST_JAR_VERSION="0.3.0"
   [ -f "$CONFIGURATION_FILE_PATH" ]
   # Results files
