@@ -123,7 +123,7 @@ function setup {
 
   #when
   pushd "$BATS_TMPDIR/$TIMESTAMP"
-  run "$RUN_SCRIPT" --jar-version "$TEST_JAR_VERSION" "$CONFIGURATION_FILE_PATH"
+  run "$RUN_SCRIPT" --jarVersion "$TEST_JAR_VERSION" "$CONFIGURATION_FILE_PATH"
   popd
 
   #then
