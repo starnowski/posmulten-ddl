@@ -4,6 +4,7 @@ function setup {
   PREVIOUS_PGPASSWORD="$PGPASSWORD"
   export TIMESTAMP=`date +%s`
   export RUN_SCRIPT="$BATS_TEST_DIRNAME/../bin/posmulten-ddl.sh"
+  export VARS_FILE_PATH="$BATS_TEST_DIRNAME/../bin/vars.sh"
   export CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH="$BATS_TEST_DIRNAME/../examples"
   mkdir -p "$BATS_TMPDIR/$TIMESTAMP"
   # Clean the work directory
@@ -15,53 +16,33 @@ function setup {
 
 @test "Run executable jar file with passed java properties for valid configuration file" {
   #given
-  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
-  [ -f "$CONFIGURATION_FILE_PATH" ]
-  # Results files
-  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
-  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+  CONFIGURATION_FILE_PATH="/none/existed/dir/all-fields.yaml"
+  CREATE_SCRIPT_PATH="create/here/script.sql"
+  DROP_SCRIPT_PATH="/drop/script.sql"
+  source "$VARS_FILE_PATH"
+  shellmock_expect java --status 0 --type regex --match "-Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar .*configuration-jar-0.4.0-jar-with-dependencies.jar"
+  shellmock_expect java --status 0 --type regex --match "-Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} .*"
+
+
+  ### java -Dposmulten.configuration.config.file.path="$1" -Dposmulten.configuration.create.script.path="$CREATE_SCRIPT_PATH" -Dposmulten.configuration.drop.script.path="$DROP_SCRIPT_PATH" -jar "$JAR_FILE_PATH"
 
   #when
   pushd "$BATS_TMPDIR/$TIMESTAMP"
   run "$RUN_SCRIPT" "$CONFIGURATION_FILE_PATH"
   popd
 
-  #then
-  echo "output is --> $output <--"  >&3
-  [ "$status" -eq 0 ]
-  [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
-  [ -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
-
-  #Smoke tests for scripts content
-  grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
-  grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
-}
-
-@test "Run executable jar file for specific version of jar file" {
-  #given
-  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields-0.3.0-valid.yaml"
-  TEST_JAR_VERSION="0.3.0"
-  [ -f "$CONFIGURATION_FILE_PATH" ]
-  # Results files
-  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
-  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
-  [ ! -f "$BATS_TEST_DIRNAME/../work/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar" ]
-
-  #when
-  pushd "$BATS_TMPDIR/$TIMESTAMP"
-  run "$RUN_SCRIPT" --jarVersion "$TEST_JAR_VERSION" "$CONFIGURATION_FILE_PATH"
-  popd
+  shellmock_dump
+  shellmock_verify
+  echo "shellmock.out output :"  >&3
+  cat shellmock.out  >&3
+  echo "shellmock.err output :"  >&3
+  #cat shellmock.err  >&3
 
   #then
   echo "output is --> $output <--"  >&3
   [ "$status" -eq 0 ]
-  [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
-  [ -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
-  [ -f "$BATS_TEST_DIRNAME/../work/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar" ]
 
-  #Smoke tests for scripts content
-  grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
-  grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
+  #TODO captured
 }
 
 function teardown {
