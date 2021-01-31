@@ -95,7 +95,7 @@ if [[ "$JAR_VERSION" == "" ]]; then
     CURRENT_JAR_VERSION="$POSMULTEN_JAR_FILE_VERSION"
 else
     #Download
-    curl -H "Accept: application/zip" "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/{JAR_VERSION}/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" --output "$SCRIPT_DIR/../work/"
+    curl -H "Accept: application/zip" "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${JAR_VERSION}/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" --output "$SCRIPT_DIR/../work/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar"
     CURRENT_JAR_VERSION="$JAR_VERSION"
 fi
 
