@@ -64,7 +64,7 @@ function setup {
   echo "output is --> $output <--"  >&3
   echo "capture output ${capture[0]}"  >&3
   [ "$status" -eq 0 ]
-  [[ "${capture[0]}" =~ "curl-stub -Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar" ]]
+  [[ "${capture[0]}" =~ "curl-stub https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${TEST_JAR_VERSION}/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar --output" ]]
   [[ "${capture[1]}" =~ "java-stub -Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar" ]]
 }
 
