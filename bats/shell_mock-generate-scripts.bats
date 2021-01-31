@@ -125,7 +125,9 @@ function setup {
   [ "$status" -eq 1 ]
   [[ "${capture[0]}" =~ "curl-stub https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${TEST_JAR_VERSION}/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar --output" ]]
   [[ ! "${capture[1]}" =~ "java-stub" ]]
-  [[ "${line[0]}" == "Unable to download jar file for version ${TEST_JAR_VERSION}" ]]
+  # Check error message
+  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output_file"
+  grep "Unable to download jar file for version ${TEST_JAR_VERSION}" "$BATS_TMPDIR/$TIMESTAMP/output_file"
 }
 
 function teardown {
