@@ -111,6 +111,33 @@ function setup {
   grep 'INFO:' "$BATS_TMPDIR/$TIMESTAMP/output_file"
 }
 
+@test "Run executable jar file for specific version of jar file" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
+  TEST_JAR_VERSION="0.3.0"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  # Results files
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ ! -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+  [ ! -f "$BATS_TEST_DIRNAME/../work/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar" ]
+
+  #when
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" --jar-version "$TEST_JAR_VERSION" "$CONFIGURATION_FILE_PATH"
+  popd
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/create_script.sql" ]
+  [ -f "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql" ]
+  [ -f "$BATS_TEST_DIRNAME/../work/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar" ]
+
+  #Smoke tests for scripts content
+  grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
+  grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
+}
+
 function teardown {
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
   # Clean the work directory
