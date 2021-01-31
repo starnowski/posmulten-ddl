@@ -15,7 +15,7 @@ jobs:
         java-version: 1.8
     - name: Install bats
       run:  |
-        git clone https://github.com/bats-core/bats-core.git
+        git clone --depth 1 --branch v1.2.1 https://github.com/bats-core/bats-core.git
         cd bats-core
         sudo ./install.sh /usr/local
     - name: Run bats tests
