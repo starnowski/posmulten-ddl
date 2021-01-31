@@ -36,7 +36,7 @@ EOF
 
 
 # Call getopt to validate the provided input.
-options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath:,verbose -- "$@")
+options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath:,verbose,jarVersion: -- "$@")
 [ $? -eq 0 ] || {
     echo "Incorrect options provided"
     print_usage
@@ -47,6 +47,7 @@ CURRENT_DIR=`pwd`
 CREATE_SCRIPT_PATH="${CURRENT_DIR}/create_script.sql"
 DROP_SCRIPT_PATH="${CURRENT_DIR}/drop_script.sql"
 VERBOSE="false"
+JAR_VERSION=""
 eval set -- "$options"
 while true; do
     case "$1" in
@@ -69,6 +70,10 @@ while true; do
         shift;
         DROP_SCRIPT_PATH="$1"
         ;;
+    --jarVersion)
+        shift;
+        JAR_VERSION="$1"
+        ;;
     --)
         shift
         break
@@ -84,9 +89,17 @@ if [[ $# -eq 0 ]]; then
 fi
 
 mkdir -p "$SCRIPT_DIR/../work"
-cp "$SCRIPT_DIR/../lib/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar" "$SCRIPT_DIR/../work"
+CURRENT_JAR_VERSION=""
+if [[ "$JAR_VERSION" == "" ]]; then
+    cp "$SCRIPT_DIR/../lib/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar" "$SCRIPT_DIR/../work"
+    CURRENT_JAR_VERSION="$POSMULTEN_JAR_FILE_VERSION"
+else
+    #Download
+    curl -H "Accept: application/zip" "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/{JAR_VERSION}/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" --output "$SCRIPT_DIR/../work/"
+    CURRENT_JAR_VERSION="$JAR_VERSION"
+fi
 
-JAR_FILE_PATH="$SCRIPT_DIR/../work/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar"
+JAR_FILE_PATH="$SCRIPT_DIR/../work/configuration-jar-${CURRENT_JAR_VERSION}-jar-with-dependencies.jar"
 
 if [[ ${VERBOSE} == "true" ]]; then
     unzip -p "$JAR_FILE_PATH" debug-logging.properties > "$SCRIPT_DIR/../bin/debug-logging.properties"
