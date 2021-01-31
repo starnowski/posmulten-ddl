@@ -30,7 +30,7 @@ function setup {
   shellmock_dump
   shellmock_verify
   echo "shellmock.out output :"  >&3
-  cat shellmock.out  >&3
+  cat "$BATS_TEST_DIRNAME/shellmock.out"  >&3
 
   #then
   echo "output is --> $output <--"  >&3
@@ -40,6 +40,10 @@ function setup {
 }
 
 function teardown {
+  if [ -e "$BATS_TEST_DIRNAME/shellmock.err" ]; then
+      cat "$BATS_TEST_DIRNAME/shellmock.err"  >&3
+      echo "shellmock.err output :"  >&3
+  fi
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
   # Clean the work directory
   rm -rf "$BATS_TEST_DIRNAME/../work"
