@@ -1,4 +1,4 @@
-name: Java Native Mechanisms Approach CI
+name: Running the bats tests
 
 on: [push]
 
