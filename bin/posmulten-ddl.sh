@@ -95,8 +95,10 @@ if [[ "$JAR_VERSION" == "" ]]; then
     cp "$SCRIPT_DIR/../lib/configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar" "$SCRIPT_DIR/../work"
     CURRENT_JAR_VERSION="$POSMULTEN_JAR_FILE_VERSION"
 else
-    #Download
-    curl "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${JAR_VERSION}/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" --output "$SCRIPT_DIR/../work/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar"
+    if [[ ! -e "$SCRIPT_DIR/../work/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" ]]; then
+        #Download
+        curl "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${JAR_VERSION}/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar" --output "$SCRIPT_DIR/../work/configuration-jar-${JAR_VERSION}-jar-with-dependencies.jar"
+    fi
     CURRENT_JAR_VERSION="$JAR_VERSION"
 fi
 
