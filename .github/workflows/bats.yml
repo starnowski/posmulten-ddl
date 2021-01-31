@@ -18,5 +18,10 @@ jobs:
         git clone --depth 1 --branch v1.2.1 https://github.com/bats-core/bats-core.git
         cd bats-core
         sudo ./install.sh /usr/local
+    - name: Install shell_mock
+      run:  |
+        git clone --depth 1 --branch 1.3 https://github.com/capitalone/bash_shell_mock.git
+        cd bash_shell_mock
+        sudo ./install.sh /usr/local
     - name: Run bats tests
       run: bats -t bats
