@@ -6,6 +6,8 @@ function setup {
   export RUN_SCRIPT="$BATS_TEST_DIRNAME/../bin/posmulten-ddl.sh"
   export CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH="$BATS_TEST_DIRNAME/../examples"
   mkdir -p "$BATS_TMPDIR/$TIMESTAMP"
+  # Clean the work directory
+  rm -rf "$BATS_TEST_DIRNAME/../work"
 }
 
 @test "Run executable jar file with passed java properties for valid configuration file" {
@@ -111,4 +113,6 @@ function setup {
 
 function teardown {
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
+  # Clean the work directory
+  rm -rf "$BATS_TEST_DIRNAME/../work"
 }
