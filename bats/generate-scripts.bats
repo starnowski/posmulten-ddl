@@ -154,8 +154,8 @@ function setup {
   echo "output is --> $output <--"  >&3
   [ "$status" -eq 0 ]
 
-  [ "${lines[0]}" = "posmulten-ddl script version: 0.1.0" ]
-  [ "${lines[1]}" = "posmulten jar file version: 0.4.0" ]
+  [ "${lines[0]}" = "posmulten-ddl script version: ${POSMULTEN_DDL_VERSION}" ]
+  [ "${lines[1]}" = "posmulten jar file version: ${POSMULTEN_JAR_FILE_VERSION}" ]
 }
 
 function teardown {
