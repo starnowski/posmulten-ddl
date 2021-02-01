@@ -28,6 +28,7 @@ OPTIONS:
         --dropScripPath         Sets path for a script that contains DDL statements that drop a shared schema strategy. By default, a file with the name drop_script.sql is being created in the current directory.
         --jarVersion            Sets version of jar file that should be used to generate ddl statements.
                                 To check what version is available please check https://search.maven.org/artifact/com.github.starnowski.posmulten.configuration/configuration-jar site.
+        --verbose               Sets a higher logging level. Useful for debugging purposes.
 
 EXAMPLES:
 
@@ -117,6 +118,9 @@ else
 fi
 
 JAR_FILE_PATH="$SCRIPT_DIR/../work/configuration-jar-${CURRENT_JAR_VERSION}-jar-with-dependencies.jar"
+
+echo "posmulten-ddl script version: ${POSMULTEN_DDL_VERSION}"
+echo "posmulten jar file version: ${CURRENT_JAR_VERSION}"
 
 if [[ ${VERBOSE} == "true" ]]; then
     unzip -p "$JAR_FILE_PATH" debug-logging.properties > "$SCRIPT_DIR/../bin/debug-logging.properties"

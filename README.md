@@ -32,6 +32,7 @@ OPTIONS:
         --dropScripPath         Sets path for a script that contains DDL statements that drop a shared schema strategy. By default, a file with the name drop_script.sql is being created in the current directory.
         --jarVersion            Sets version of jar file that should be used to generate ddl statements.
                                 To check what version is available please check https://search.maven.org/artifact/com.github.starnowski.posmulten.configuration/configuration-jar site.
+        --verbose               Sets a higher logging level. Useful for debugging purposes.
 ```
 
 EXAMPLES:
