@@ -38,5 +38,8 @@ EXAMPLES:
 
 ```bash
     posmulten-ddl.sh ../examples/all-fields.yaml
+    # Passing parameters with paths where result script should be created
     posmulten-ddl.sh --createScriptPath "../examples/cscript.sql" --dropScripPath "../examples/dscript.sql" ../examples/all-fields.yaml
+    # Setting version of jar file which should be used
+    posmulten-ddl.sh --jarVersion "0.3.0" ../examples/all-fields-0.3.0-valid.yaml
 ```
