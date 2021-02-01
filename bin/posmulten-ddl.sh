@@ -118,6 +118,9 @@ fi
 
 JAR_FILE_PATH="$SCRIPT_DIR/../work/configuration-jar-${CURRENT_JAR_VERSION}-jar-with-dependencies.jar"
 
+echo "posmulten-ddl script version: ${POSMULTEN_DDL_VERSION}"
+echo "posmulten jar file version: ${CURRENT_JAR_VERSION}"
+
 if [[ ${VERBOSE} == "true" ]]; then
     unzip -p "$JAR_FILE_PATH" debug-logging.properties > "$SCRIPT_DIR/../bin/debug-logging.properties"
     java -Djava.util.logging.config.file="$SCRIPT_DIR/../bin/debug-logging.properties" -Dposmulten.configuration.config.file.path="$1" -Dposmulten.configuration.create.script.path="$CREATE_SCRIPT_PATH" -Dposmulten.configuration.drop.script.path="$DROP_SCRIPT_PATH" -jar "$JAR_FILE_PATH"
