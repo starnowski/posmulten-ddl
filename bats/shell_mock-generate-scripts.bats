@@ -163,6 +163,32 @@ function setup {
   [ "${lines[1]}" = "posmulten jar file version: ${TEST_JAR_VERSION}" ]
 }
 
+@test "Run executable jar file with verbose parameter and pass correct file with logging options" {
+  #given
+  CONFIGURATION_FILE_PATH="/none/existed/dir/all-fields.yaml"
+  CREATE_SCRIPT_PATH="create/here/script.sql"
+  DROP_SCRIPT_PATH="/drop/script.sql"
+  source "$VARS_FILE_PATH"
+  shellmock_expect java --status 0 --type regex --match "-Djava.util.logging.config.file=.*/debug-logging.properties -Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -jar .*configuration-jar-${POSMULTEN_JAR_FILE_VERSION}-jar-with-dependencies.jar"
+
+  #when
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" --verbose --createScriptPath "$CREATE_SCRIPT_PATH" --dropScripPath "$DROP_SCRIPT_PATH" "$CONFIGURATION_FILE_PATH"
+  popd
+
+  shellmock_dump
+  shellmock_verify
+  echo "shellmock.out output :"  >&3
+  cat "$BATS_TEST_DIRNAME/shellmock.out"  >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  echo "capture output ${capture[0]}"  >&3
+  [ "$status" -eq 0 ]
+  REGEX_PATTERN="java-stub -Djava.util.logging.config.file=.* -Dposmulten.configuration.config.file.path=${CONFIGURATION_FILE_PATH} -Dposmulten.configuration.create.script.path=${CREATE_SCRIPT_PATH} -Dposmulten.configuration.drop.script.path=${DROP_SCRIPT_PATH} -ja"
+  [[ "${capture[0]}" =~ $REGEX_PATTERN ]]
+}
+
 function teardown {
   if [ -e "$BATS_TEST_DIRNAME/shellmock.err" ]; then
       cat "$BATS_TEST_DIRNAME/shellmock.err"  >&3
