@@ -4,6 +4,7 @@ function setup {
   PREVIOUS_PGPASSWORD="$PGPASSWORD"
   export TIMESTAMP=`date +%s`
   export RUN_SCRIPT="$BATS_TEST_DIRNAME/../bin/posmulten-ddl.sh"
+  export VARS_SOURCE_SCRIPT="$BATS_TEST_DIRNAME/../bin/vars.sh"
   export CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH="$BATS_TEST_DIRNAME/../examples"
   mkdir -p "$BATS_TMPDIR/$TIMESTAMP"
   # Clean the work directory
@@ -136,6 +137,25 @@ function setup {
   #Smoke tests for scripts content
   grep 'CREATE POLICY' "$BATS_TMPDIR/$TIMESTAMP/create_script.sql"
   grep 'DROP POLICY IF EXISTS' "$BATS_TMPDIR/$TIMESTAMP/drop_script.sql"
+}
+
+@test "Script should print script and jar file version during execution" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  source "$VARS_SOURCE_SCRIPT"
+
+  #when
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" "$CONFIGURATION_FILE_PATH"
+  popd
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+
+  [ "${lines[0]}" = "posmulten-ddl script version: 0.1.0" ]
+  [ "${lines[1]}" = "posmulten jar file version: 0.4.0" ]
 }
 
 function teardown {
