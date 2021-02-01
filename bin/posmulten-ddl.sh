@@ -24,11 +24,16 @@ OPTIONS:
     -h, --help                  Prints the usage information
         --createScriptPath      Sets path for a script that contains DDL statements that create a shared schema strategy. By default, a file with the name create_script.sql is being created in the current directory.
         --dropScripPath         Sets path for a script that contains DDL statements that drop a shared schema strategy. By default, a file with the name drop_script.sql is being created in the current directory.
+        --jarVersion            Sets version of jar file that should be used to generate ddl statements.
+                                To check what version is available please check https://search.maven.org/artifact/com.github.starnowski.posmulten.configuration/configuration-jar site.
 
 EXAMPLES:
 
     posmulten-ddl.sh ../examples/all-fields.yaml
+    # Passing parameters with paths where result script should be created
     posmulten-ddl.sh --createScriptPath "../examples/cscript.sql" --dropScripPath "../examples/dscript.sql" ../examples/all-fields.yaml
+    # Setting version of jar file which should be used
+    posmulten-ddl.sh --jarVersion "0.3.0" ../examples/all-fields-0.3.0-valid.yaml
 
 EOF
 }
