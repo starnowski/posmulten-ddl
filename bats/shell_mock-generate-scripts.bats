@@ -54,7 +54,7 @@ function should_not_print_yaml_schema_guide_test {
   CREATE_SCRIPT_PATH="create/here/script.sql"
   DROP_SCRIPT_PATH="/drop/script.sql"
   source "$VARS_FILE_PATH"
-  shellmock_expect java --status 0 --type regex --match "-Dposmulten.configuration.config.yaml.syntax.guide.print=true -jar .*configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar"
+  shellmock_expect curl --status 0 --type regex --match "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${TEST_JAR_VERSION}/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar --output .*configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar"
   [ ! -f "$BATS_TEST_DIRNAME/../work/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar" ]
   #Get script version
 
@@ -267,11 +267,11 @@ function should_not_print_yaml_schema_guide_test {
 }
 
 @test "Script should not print yaml schema guide for library version 0.4.1" {
-  should_not_print_yaml_schema_guide_test "0.4.1"
+  should_not_print_yaml_schema_guide_test "0.4.1" >&3
 }
 
 @test "Script should not print yaml schema guide for library version 0.3.9" {
-  should_not_print_yaml_schema_guide_test "0.3.9"
+  should_not_print_yaml_schema_guide_test "0.3.9" >&3
 }
 
 function teardown {
