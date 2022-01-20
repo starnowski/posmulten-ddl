@@ -189,6 +189,39 @@ function setup {
   [[ "${capture[0]}" =~ $REGEX_PATTERN ]]
 }
 
+@test "Script should print yaml schema guide for version 0.5.1" {
+  #given
+  TEST_JAR_VERSION="0.5.1"
+  CONFIGURATION_FILE_PATH="/none/existed/dir/all-fields.yaml"
+  CREATE_SCRIPT_PATH="create/here/script.sql"
+  DROP_SCRIPT_PATH="/drop/script.sql"
+  source "$VARS_FILE_PATH"
+  shellmock_expect java --status 0 --type regex --match "-Dposmulten.configuration.config.yaml.syntax.guide.print=true -jar .*configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar"
+  shellmock_expect curl --status 0 --type regex --match "https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${TEST_JAR_VERSION}/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar --output .*configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar"
+  [ ! -f "$BATS_TEST_DIRNAME/../work/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar" ]
+  #Get script version
+
+  #when
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" --printYamlSchemaGuide --jarVersion "$TEST_JAR_VERSION"
+  popd
+
+  shellmock_dump
+  shellmock_verify
+  echo "shellmock.out output :"  >&3
+  cat "$BATS_TEST_DIRNAME/shellmock.out"  >&3
+
+  #then
+  echo "output is --> $output <--"  >&3
+  echo "capture output ${capture[0]}"  >&3
+  [ "$status" -eq 0 ]
+  [[ "${capture[0]}" =~ "curl-stub https://repo1.maven.org/maven2/com/github/starnowski/posmulten/configuration/configuration-jar/${TEST_JAR_VERSION}/configuration-jar-${TEST_JAR_VERSION}-jar-with-dependencies.jar --output" ]]
+  [[ "${capture[1]}" =~ "java-stub -Dposmulten.configuration.config.yaml.syntax.guide.print="true" -jar" ]]
+
+  [ "${lines[0]}" = "posmulten-ddl script version: ${POSMULTEN_DDL_VERSION}" ]
+  [ "${lines[1]}" = "posmulten jar file version: ${TEST_JAR_VERSION}" ]
+}
+
 function teardown {
   if [ -e "$BATS_TEST_DIRNAME/shellmock.err" ]; then
       cat "$BATS_TEST_DIRNAME/shellmock.err"  >&3
