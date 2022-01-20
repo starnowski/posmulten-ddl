@@ -158,6 +158,24 @@ function setup {
   [ "${lines[1]}" = "posmulten jar file version: ${POSMULTEN_JAR_FILE_VERSION}" ]
 }
 
+@test "Script should print yaml schema guide" {
+  #given
+  CONFIGURATION_FILE_PATH="$CONFIGURATION_YAML_TEST_RESOURCES_DIR_PATH/all-fields.yaml"
+  [ -f "$CONFIGURATION_FILE_PATH" ]
+  source "$VARS_SOURCE_SCRIPT"
+
+  #when
+  pushd "$BATS_TMPDIR/$TIMESTAMP"
+  run "$RUN_SCRIPT" --printYamlSchemaGuide
+  popd
+
+  #then
+  echo "output is --> $output <--"  >&3
+  [ "$status" -eq 0 ]
+
+  [ "${lines[0]}" = "# Configuration-yaml-interpreter" ]
+}
+
 function teardown {
   rm -rf "$BATS_TMPDIR/$TIMESTAMP"
   # Clean the work directory
