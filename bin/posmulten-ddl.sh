@@ -43,10 +43,16 @@ EXAMPLES:
 EOF
 }
 
+function print_yaml_schema_guide
+{
+ java -Dposmulten.configuration.config.yaml.syntax.guide.print="true" -jar "$JAR_FILE_PATH"
+ exit 0
+}
+
 
 
 # Call getopt to validate the provided input.
-options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath:,verbose,jarVersion: -- "$@")
+options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath:,verbose,jarVersion:,printYamlSchemaGuide -- "$@")
 [ $? -eq 0 ] || {
     echo "Incorrect options provided"
     print_usage
@@ -58,6 +64,7 @@ CREATE_SCRIPT_PATH="${CURRENT_DIR}/create_script.sql"
 DROP_SCRIPT_PATH="${CURRENT_DIR}/drop_script.sql"
 VERBOSE="false"
 JAR_VERSION=""
+PRINT_YAML_SCHEMA_GUIDE="false"
 eval set -- "$options"
 while true; do
     case "$1" in
@@ -71,6 +78,9 @@ while true; do
     --help)
         print_usage
         exit 0
+        ;;
+    --printYamlSchemaGuide)
+        PRINT_YAML_SCHEMA_GUIDE="true"
         ;;
     --createScriptPath)
         shift;
@@ -92,7 +102,7 @@ while true; do
     shift
 done
 
-if [[ $# -eq 0 ]]; then
+if [[ $# -eq 0 && ${PRINT_YAML_SCHEMA_GUIDE} == "false" ]]; then
     echo "Invalid number of arguments"
     print_usage
     exit 1
@@ -123,6 +133,10 @@ JAR_FILE_PATH="$SCRIPT_DIR/../work/configuration-jar-${CURRENT_JAR_VERSION}-jar-
 
 echo "posmulten-ddl script version: ${POSMULTEN_DDL_VERSION}"
 echo "posmulten jar file version: ${CURRENT_JAR_VERSION}"
+
+if [[ ${PRINT_YAML_SCHEMA_GUIDE} == "true" ]]; then
+  print_yaml_schema_guide
+fi
 
 if [[ ${VERBOSE} == "true" ]]; then
     unzip -p "$JAR_FILE_PATH" debug-logging.properties > "$SCRIPT_DIR/../bin/debug-logging.properties"
