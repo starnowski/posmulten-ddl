@@ -16,6 +16,7 @@ USAGE:
     For the passed path to the configuration file, the wrapper creates two SQL scripts. One contains DDL statements that create a shared schema strategy, and the other one drops it.
     Important, wrapper required installed java in version 8 or newer.
     Please check module https://github.com/starnowski/posmulten/tree/master/configuration-parent/configuration-yaml-interpreter to find out how to prepare a configuration file.
+    You can also use option '--printYamlSchemaGuide' to print use guide for Yaml schema.
 
     $BASH_SOURCE {Options} {Path to configuration file}
 
@@ -28,6 +29,7 @@ OPTIONS:
         --dropScripPath         Sets path for a script that contains DDL statements that drop a shared schema strategy. By default, a file with the name drop_script.sql is being created in the current directory.
         --jarVersion            Sets version of jar file that should be used to generate ddl statements.
                                 To check what version is available please check https://search.maven.org/artifact/com.github.starnowski.posmulten.configuration/configuration-jar site.
+        --printYamlSchemaGuide  Prints Yaml schema guide. This option is available for library since version 0.5.0
         --verbose               Sets a higher logging level. Useful for debugging purposes.
 
 EXAMPLES:
