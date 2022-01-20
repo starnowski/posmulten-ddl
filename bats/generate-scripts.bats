@@ -173,7 +173,8 @@ function setup {
   echo "output is --> $output <--"  >&3
   [ "$status" -eq 0 ]
 
-  [ "${lines[0]}" = "# Configuration-yaml-interpreter" ]
+  echo "$output" > "$BATS_TMPDIR/$TIMESTAMP/output_file"
+  grep "# Configuration-yaml-interpreter" "$BATS_TMPDIR/$TIMESTAMP/output_file"
 }
 
 function teardown {
