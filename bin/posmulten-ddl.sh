@@ -45,11 +45,14 @@ EOF
 
 function print_yaml_schema_guide
 {
+  if [[ "${MAJOR_JAR_VERSION}" == "0" && $MINOR_JAR_VERSION -lt 5 ]]; then
+    MINOR_JAR_VERSION="${BASH_REMATCH[1]}"
+    echo "The '--printYamlSchemaGuide' option is available since version 0.5.0, current version is ${JAR_VERSION}"
+    exit 1
+  fi
  java -Dposmulten.configuration.config.yaml.syntax.guide.print="true" -jar "$JAR_FILE_PATH"
  exit 0
 }
-
-
 
 # Call getopt to validate the provided input.
 options=$(getopt -o "h" --long help,createScriptPath:,dropScripPath:,verbose,jarVersion:,printYamlSchemaGuide -- "$@")
@@ -133,6 +136,15 @@ JAR_FILE_PATH="$SCRIPT_DIR/../work/configuration-jar-${CURRENT_JAR_VERSION}-jar-
 
 echo "posmulten-ddl script version: ${POSMULTEN_DDL_VERSION}"
 echo "posmulten jar file version: ${CURRENT_JAR_VERSION}"
+
+# Resolving jar version
+MAJOR_JAR_VERSION=""
+MINOR_JAR_VERSION=""
+version_regex='([0-9]+)\.([0-9]+)\..*'
+if [[ ${CURRENT_JAR_VERSION} =~ $version_regex ]]; then
+  MAJOR_JAR_VERSION="${BASH_REMATCH[1]}"
+  MINOR_JAR_VERSION="${BASH_REMATCH[2]}"
+fi
 
 if [[ ${PRINT_YAML_SCHEMA_GUIDE} == "true" ]]; then
   print_yaml_schema_guide
